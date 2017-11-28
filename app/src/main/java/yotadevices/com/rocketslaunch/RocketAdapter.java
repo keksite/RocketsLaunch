@@ -1,5 +1,6 @@
 package yotadevices.com.rocketslaunch;
 
+import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 /**
@@ -15,10 +18,11 @@ import java.util.List;
  */
 
 public class RocketAdapter extends RecyclerView.Adapter<RocketAdapter.ViewHolder> {
-
+    Context context;
     private List<Rocket> rockets;
 
-    public RocketAdapter(List<Rocket> rockets) {
+    public RocketAdapter(Context context, List<Rocket> rockets) {
+        this.context = context;
         this.rockets = rockets;
     }
 
@@ -31,9 +35,9 @@ public class RocketAdapter extends RecyclerView.Adapter<RocketAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Rocket rocket = rockets.get(position);
-        holder.rocketIcon.setImageResource(rocket.getRocketIcon());
+        Picasso.with(this.context).load(rocket.getRocketIcon()).into(holder.rocketIcon);
         holder.rocketName.setText(rocket.getRocketNAme());
-        holder.launchDate.setText(rocket.getLaunchData().toString());
+        holder.launchDate.setText(String.valueOf(rocket.getLaunchData()));
         holder.details.setText(rocket.getDetails());
         holder.cv.setRadius(25);
 

@@ -1,20 +1,18 @@
 package yotadevices.com.rocketslaunch;
 
-import java.util.Date;
-
 /**
  * Created by keksi on 27.11.2017.
  */
 
 public class Rocket {
-    int rocketIcon;
+    String rocketIcon;
     String rocketNAme;
-    Date launchData;
+    long launchData;
     String details;
 
-    public Rocket(String rocketNAme, Date launchData, String details) {
+    public Rocket(String rocketIcon, String rocketNAme, long launchData, String details) {
 
-        this.rocketIcon = android.R.drawable.presence_busy;
+        this.rocketIcon = rocketIcon;
         this.rocketNAme = rocketNAme;
         this.launchData = launchData;
         this.details = details;
@@ -24,7 +22,7 @@ public class Rocket {
         this.rocketNAme = rocketNAme;
     }
 
-    public void setLaunchData(Date launchData) {
+    public void setLaunchData(long launchData) {
         this.launchData = launchData;
     }
 
@@ -32,12 +30,12 @@ public class Rocket {
         this.details = details;
     }
 
-    public void setRocketIcon(int rocketIcon) {
+    public void setRocketIcon(String rocketIcon) {
 
         this.rocketIcon = rocketIcon;
     }
 
-    public int getRocketIcon() {
+    public String getRocketIcon() {
 
         return rocketIcon;
     }
@@ -46,7 +44,7 @@ public class Rocket {
         return rocketNAme;
     }
 
-    public Date getLaunchData() {
+    public long getLaunchData() {
         return launchData;
     }
 
