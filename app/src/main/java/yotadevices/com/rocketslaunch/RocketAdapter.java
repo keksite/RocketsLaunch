@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class RocketAdapter extends RecyclerView.Adapter<RocketAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Rocket rocket = rockets.get(position);
-        Picasso.with(this.context).load(rocket.getRocketIcon()).into(holder.rocketIcon);
+        Picasso.with(this.context).load(rocket.getRocketIcon()).networkPolicy(NetworkPolicy.OFFLINE).into(holder.rocketIcon);
         holder.rocketName.setText(rocket.getRocketNAme());
         holder.launchDate.setText(String.valueOf(rocket.getLaunchData()));
         holder.details.setText(rocket.getDetails());

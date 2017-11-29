@@ -8,12 +8,18 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
+
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,25 +32,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rocket_recycleview);
-
-        List<Rocket> rockets = new ArrayList<>();
+        /**
+         * Array List for Binding Data from JSON to this List
+         */
+                rockets = new ArrayList<>();
+        /**
+         * Binding that List to Adapter
+         */
+        adapter = new RocketAdapter(this,rockets);
 
 
         final RecyclerView recyclerView = (RecyclerView)findViewById(R.id.rv);
-        recyclerView.setHasFixedSize(true);
-        adapter = new RocketAdapter(this,rockets);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(itemAnimator);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        new GetDataTask().execute();
 
-        if (InternetConnection.checkConnection(getApplicationContext())) {
-            new GetDataTask().execute();
-        } else {
-            Snackbar.make(view, "Internet Connection Not Available", Snackbar.LENGTH_LONG).show();
-        }
+
+
     }
 
     /**
@@ -52,94 +64,67 @@ public class MainActivity extends AppCompatActivity {
      */
     class GetDataTask extends AsyncTask<Void, Void, Void> {
 
-        @Nullable
         @Override
         protected Void doInBackground(Void... params) {
-
-            /**
-             * Getting JSON Object from Web Using okHttp
-             */
-            JSONObject jsonObject = JSONParser.getDataFromWeb();
-
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url("https://api.spacexdata.com/v1/launches?year=2017")
+                    .build();
             try {
-                /**
-                 * Check Whether Its NULL???
-                 */
-                if (jsonObject != null) {
-                    /**
-                     * Check Length...
-                     */
-                    if(jsonObject.length() > 0) {
-                        /**
-                         * Getting Array named "contacts" From MAIN Json Object
-                         */
-                        JSONArray array = jsonObject.getJSONArray();
+                Response response = client.newCall(request).execute();
+                    JSONArray jsonArray = new JSONArray(response.body().string());
+                    for (int i = 0; i < jsonArray.length(); i++) {
 
-                        /**
-                         * Check Length of Array...
-                         */
-                        int lenArray = array.length();
-                        if(lenArray > 0) {
-                            for(int jIndex = 0; jIndex < lenArray; jIndex++) {
+                        JSONObject jsonObject = null;
+                        jsonObject = jsonArray.getJSONObject(i);
 
-                                /**
-                                 * Creating Every time New Object
-                                 * and
-                                 * Adding into List
-                                 */
-                                MyDataModel model = new MyDataModel();
 
-                                /**
-                                 * Getting Inner Object from contacts array...
-                                 * and
-                                 * From that We will get Name of that Contact
-                                 *
-                                 */
-                                JSONObject innerObject = array.getJSONObject(jIndex);
-                                String name = innerObject.getString(Keys.KEY_NAME);
-                                String email = innerObject.getString(Keys.KEY_EMAIL);
-                                String image = innerObject.getString(Keys.KEY_PROFILE_PIC);
-
-                                /**
-                                 * Getting Object from Object "phone"
-                                 */
-                                JSONObject phoneObject = innerObject.getJSONObject(Keys.KEY_PHONE);
-                                String phone = phoneObject.getString(Keys.KEY_MOBILE);
-
-                                model.setName(name);
-                                model.setEmail(email);
-                                model.setPhone(phone);
-                                model.setImage(image);
-
-                                /**
-                                 * Adding name and phone concatenation in List...
-                                 */
-                                list.add(model);
-                            }
+                        Object obj = jsonObject.get("rocket");
+                        String rocketName;
+                        if (obj instanceof String) {
+                            rocketName = jsonObject.getString("rocket");
+                        } else {
+                            JSONObject rocket = jsonObject.getJSONObject("rocket");
+                            rocketName = rocket.getString("rocket_name");
                         }
-                    }
-                } else {
+                        // get rocketName
 
-                }
-            } catch (JSONException je) {
-                Log.i(JSONParser.TAG, "" + je.getLocalizedMessage());
+
+                        //get rocketImage
+                        JSONObject link = jsonObject.getJSONObject("links");
+                        String missionPatch = link.getString("mission_patch");
+
+                        //get details
+                        String details = jsonObject.getString("details");
+                        String data;
+                        if(jsonObject.has("launch_date_unix")) {
+                            //get Data
+                             data = jsonObject.getString("launch_date_unix");
+                        }
+                        else{
+                            data = jsonObject.getString("launch_date_utc");
+
+                        }
+
+                        rockets.add(new Rocket(missionPatch, rocketName, data, details));
+                    }
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            catch (JSONException ex){
+                ex.printStackTrace();
+            }
+
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            adapter.notifyDataSetChanged();
             super.onPostExecute(aVoid);
-            dialog.dismiss();
-            /**
-             * Checking if List size if more than zero then
-             * Update ListView
-             */
-            if(list.size() > 0) {
-                adapter.notifyDataSetChanged();
-            } else {
-                Snackbar.make(findViewById(R.id.parentLayout), "No Data Found", Snackbar.LENGTH_LONG).show();
-            }
+
         }
     }
 }

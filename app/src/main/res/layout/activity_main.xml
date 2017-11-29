@@ -15,15 +15,15 @@
         android:padding="16dp"
         >
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:id="@+id/rocket_icon"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="16dp"
                 />
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/rocket_name"
                 android:layout_toRightOf="@+id/rocket_icon"
@@ -31,15 +31,17 @@
                 android:textSize="30sp"
                 />
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/launch_date"
                 android:layout_toRightOf="@+id/rocket_icon"
                 android:layout_below="@+id/rocket_name"
                 />
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:id="@+id/details"
                 android:layout_toRightOf="@+id/rocket_icon"
                 android:layout_below="@+id/launch_date"

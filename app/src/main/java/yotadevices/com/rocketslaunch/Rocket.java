@@ -1,5 +1,8 @@
 package yotadevices.com.rocketslaunch;
 
+import java.text.ParseException;
+import java.util.Calendar;
+
 /**
  * Created by keksi on 27.11.2017.
  */
@@ -7,10 +10,10 @@ package yotadevices.com.rocketslaunch;
 public class Rocket {
     String rocketIcon;
     String rocketNAme;
-    long launchData;
+    String launchData;
     String details;
 
-    public Rocket(String rocketIcon, String rocketNAme, long launchData, String details) {
+    public Rocket(String rocketIcon, String rocketNAme, String launchData, String details) {
 
         this.rocketIcon = rocketIcon;
         this.rocketNAme = rocketNAme;
@@ -22,7 +25,7 @@ public class Rocket {
         this.rocketNAme = rocketNAme;
     }
 
-    public void setLaunchData(long launchData) {
+    public void setLaunchData(String launchData) {
         this.launchData = launchData;
     }
 
@@ -44,8 +47,21 @@ public class Rocket {
         return rocketNAme;
     }
 
-    public long getLaunchData() {
-        return launchData;
+    public String getLaunchData() {
+        try{
+            Calendar mydate = Calendar.getInstance();
+            mydate.setTimeInMillis(Long.parseLong(this.launchData)*1000);
+            StringBuilder builder = new StringBuilder();
+            builder.append(mydate.get(Calendar.DAY_OF_MONTH)).append("-");
+            builder.append(mydate.get(Calendar.MONTH)).append("-");
+            builder.append(mydate.get(Calendar.YEAR));
+
+            return builder.toString();
+        }
+        catch (NumberFormatException ex){
+            return this.launchData;
+        }
+
     }
 
     public String getDetails() {
