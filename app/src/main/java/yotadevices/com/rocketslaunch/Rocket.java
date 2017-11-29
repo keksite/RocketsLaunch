@@ -1,6 +1,5 @@
 package yotadevices.com.rocketslaunch;
 
-import java.text.ParseException;
 import java.util.Calendar;
 
 /**
@@ -51,12 +50,9 @@ public class Rocket {
         try{
             Calendar mydate = Calendar.getInstance();
             mydate.setTimeInMillis(Long.parseLong(this.launchData)*1000);
-            StringBuilder builder = new StringBuilder();
-            builder.append(mydate.get(Calendar.DAY_OF_MONTH)).append("-");
-            builder.append(mydate.get(Calendar.MONTH)).append("-");
-            builder.append(mydate.get(Calendar.YEAR));
-
-            return builder.toString();
+            return String.valueOf(mydate.get(Calendar.DAY_OF_MONTH)) + "-" +
+                    mydate.get(Calendar.MONTH) + "-" +
+                    mydate.get(Calendar.YEAR);
         }
         catch (NumberFormatException ex){
             return this.launchData;

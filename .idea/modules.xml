@@ -3,9 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RocketsLaunch.iml" filepath="$PROJECT_DIR$/RocketsLaunch.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../../dmitry.barbashin/Desktop/education/RocketsLaunch/RocketsLaunch.iml" filepath="$PROJECT_DIR$/../../../dmitry.barbashin/Desktop/education/RocketsLaunch/RocketsLaunch.iml" />
+      <module fileurl="file://C:\Users\dmitry.barbashin\dmitry.barbashin\Desktop\education\RocketsLaunch\RocketsLaunch.iml" filepath="C:\Users\dmitry.barbashin\dmitry.barbashin\Desktop\education\RocketsLaunch\RocketsLaunch.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../../dmitry.barbashin/Desktop/education/RocketsLaunch/app/app.iml" filepath="$PROJECT_DIR$/../../../dmitry.barbashin/Desktop/education/RocketsLaunch/app/app.iml" />
+      <module fileurl="file://C:\Users\dmitry.barbashin\dmitry.barbashin\Desktop\education\RocketsLaunch\app\app.iml" filepath="C:\Users\dmitry.barbashin\dmitry.barbashin\Desktop\education\RocketsLaunch\app\app.iml" />
     </modules>
   </component>
 </project>

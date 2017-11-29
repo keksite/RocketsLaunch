@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -19,10 +19,10 @@ import java.util.List;
  */
 
 public class RocketAdapter extends RecyclerView.Adapter<RocketAdapter.ViewHolder> {
-    Context context;
+    private Context context;
     private List<Rocket> rockets;
 
-    public RocketAdapter(Context context, List<Rocket> rockets) {
+    RocketAdapter(Context context, List<Rocket> rockets) {
         this.context = context;
         this.rockets = rockets;
     }
@@ -36,11 +36,24 @@ public class RocketAdapter extends RecyclerView.Adapter<RocketAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Rocket rocket = rockets.get(position);
-        Picasso.with(this.context).load(rocket.getRocketIcon()).networkPolicy(NetworkPolicy.OFFLINE).into(holder.rocketIcon);
+        Picasso.with(this.context)
+                .load(rocket.getRocketIcon())
+                .fit().centerInside()
+                .into(holder.rocketIcon);
         holder.rocketName.setText(rocket.getRocketNAme());
         holder.launchDate.setText(String.valueOf(rocket.getLaunchData()));
         holder.details.setText(rocket.getDetails());
         holder.cv.setRadius(25);
+        holder.cv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CharSequence text = "Hello toast!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+        });
 
     }
 
@@ -49,7 +62,7 @@ public class RocketAdapter extends RecyclerView.Adapter<RocketAdapter.ViewHolder
         return rockets.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder{
         CardView cv;
         private ImageView rocketIcon;
         private TextView rocketName;
