@@ -9,7 +9,7 @@
     android:layout_height="wrap_content"
     android:background="#FEFEFE"
     android:layout_margin="8dp"
-    app:cardCornerRadius="4dp"
+    app:cardCornerRadius="25dp"
     android:id="@+id/cv">
 
     <RelativeLayout
