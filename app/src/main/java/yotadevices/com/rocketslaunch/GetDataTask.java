@@ -24,17 +24,20 @@ import java.util.ArrayList;
 class GetDataTask extends AsyncTask<Void, Void, Void> {
     private ArrayList<Rocket> rockets;
     private RocketAdapter adapter;
+    String id;
 
-    public GetDataTask(RocketAdapter adapter, ArrayList<Rocket> rockets) {
+    public GetDataTask(RocketAdapter adapter, ArrayList<Rocket> rockets, String id) {
         this.adapter = adapter;
         this.rockets = rockets;
+        this.id = id;
     }
 
     @Override
     protected Void doInBackground(Void... params) {
+        rockets.clear();
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("https://api.spacexdata.com/v1/launches?year=2017")
+                .url("https://api.spacexdata.com/v2/launches?launch_year="+id)
                 .build();
         try {
             Response response = client.newCall(request).execute();
