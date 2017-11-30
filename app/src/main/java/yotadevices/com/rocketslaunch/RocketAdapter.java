@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -40,6 +41,10 @@ public class RocketAdapter extends RecyclerView.Adapter<RocketAdapter.ViewHolder
                 .load(rocket.getRocketIcon())
                 .fit().centerInside()
                 .into(holder.rocketIcon);
+        /*Glide.with(this.context)
+                .load(rocket.getRocketIcon())
+                .crossFade()
+                .into(holder.rocketIcon);*/
         holder.rocketName.setText(rocket.getRocketNAme());
         holder.launchDate.setText(String.valueOf(rocket.getLaunchData()));
         holder.details.setText(rocket.getDetails());

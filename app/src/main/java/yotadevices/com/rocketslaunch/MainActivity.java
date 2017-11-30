@@ -13,6 +13,16 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Rocket> rockets;
     private RocketAdapter adapter;
+    private RecyclerView recyclerView;
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if(outState != null){
+            // scroll to existing position which exist before rotation.
+            recyclerView.scrollToPosition(outState.getInt("position"));
+        }
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,10 +30,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.rocket_recycleview);
         rockets = new ArrayList<>();
         adapter = new RocketAdapter(this,rockets);
-        adapter.setHasStableIds(true);
+       // adapter.setHasStableIds(true);
 
-
-        final RecyclerView recyclerView = (RecyclerView)findViewById(R.id.rv);
+        recyclerView = (RecyclerView)findViewById(R.id.rv);
        /* recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(this.getApplicationContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
@@ -53,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setItemViewCacheSize(20);
         recyclerView.setDrawingCacheEnabled(true);
         recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        if(savedInstanceState != null){
+            // scroll to existing position which exist before rotation.
+            recyclerView.scrollToPosition(savedInstanceState.getInt("position"));
+        }
         new GetDataTask(adapter, rockets).execute();
 
     }
