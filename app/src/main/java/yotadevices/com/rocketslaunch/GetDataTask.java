@@ -5,6 +5,8 @@ package yotadevices.com.rocketslaunch;
  */
 
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 
 import com.squareup.okhttp.OkHttpClient;
@@ -17,31 +19,43 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Creating Get Data Task for Getting Data From Web
  */
 class GetDataTask extends AsyncTask<Void, Void, Void> {
+   // private ProgressDialog pdialog;
     private ArrayList<Rocket> rockets;
     private RocketAdapter adapter;
+    private String year;
 
-    public GetDataTask(RocketAdapter adapter, ArrayList<Rocket> rockets) {
+    public GetDataTask(RocketAdapter adapter, /*ArrayList<Rocket> rockets,*/ String year/*Context context*/) {
         this.adapter = adapter;
-        this.rockets = rockets;
+        this.rockets = new ArrayList<>();
+        this.year = year;
+       // pdialog = new ProgressDialog(context);
     }
 
     @Override
-    protected Void doInBackground(Void... params) {
+    protected void onProgressUpdate(Void... values) {
+        super.onProgressUpdate();
+
+    }
+
+    @Override
+    protected Void doInBackground(Void... param) {
+
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("https://api.spacexdata.com/v1/launches?year=2017")
+                .url("https://api.spacexdata.com/v2/launches?launch_year=" + year)
                 .build();
         try {
             Response response = client.newCall(request).execute();
             JSONArray jsonArray = new JSONArray(response.body().string());
             for (int i = 0; i < jsonArray.length(); i++) {
 
-                JSONObject jsonObject = null;
+                JSONObject jsonObject;
                 jsonObject = jsonArray.getJSONObject(i);
 
 
@@ -63,22 +77,19 @@ class GetDataTask extends AsyncTask<Void, Void, Void> {
                 //get details
                 String details = jsonObject.getString("details");
                 String data;
-                if(jsonObject.has("launch_date_unix")) {
+                if (jsonObject.has("launch_date_unix")) {
                     //get Data
                     data = jsonObject.getString("launch_date_unix");
-                }
-                else{
+                } else {
                     data = jsonObject.getString("launch_date_utc");
                 }
-
                 rockets.add(new Rocket(missionPatch, rocketName, data, details));
             }
 
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        catch (JSONException ex){
+        } catch (JSONException ex) {
             ex.printStackTrace();
         }
 
@@ -86,9 +97,21 @@ class GetDataTask extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        /*pdialog.setCancelable(false);
+        pdialog.setTitle("Please wait.");
+        pdialog.setMessage("doing stuff...");
+        pdialog.show();*/
+    }
+
+    @Override
     protected void onPostExecute(Void aVoid) {
-        adapter.notifyDataSetChanged();
         super.onPostExecute(aVoid);
+       /* if (pdialog.isShowing())
+            pdialog.dismiss();*/
+        adapter.swap(rockets);
+
 
     }
 }
