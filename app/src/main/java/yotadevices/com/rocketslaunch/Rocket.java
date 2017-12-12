@@ -47,14 +47,13 @@ public class Rocket {
     }
 
     public String getLaunchData() {
-        try{
+        try {
             Calendar mydate = Calendar.getInstance();
-            mydate.setTimeInMillis(Long.parseLong(this.launchData)*1000);
+            mydate.setTimeInMillis(Long.parseLong(this.launchData) * 1000);
             return String.valueOf(mydate.get(Calendar.DAY_OF_MONTH)) + "-" +
                     mydate.get(Calendar.MONTH) + "-" +
                     mydate.get(Calendar.YEAR);
-        }
-        catch (NumberFormatException ex){
+        } catch (NumberFormatException ex) {
             return this.launchData;
         }
 
