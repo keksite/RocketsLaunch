@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,11 +29,14 @@ public class RocketAdapter extends RecyclerView.Adapter<RocketAdapter.ViewHolder
         this.rockets = rockets;
     }
 
-    public void swap(ArrayList<Rocket> datas) {
+    public void swap(List<Rocket> datas) {
         rockets.clear();
-        Collections.reverse(datas);
-        rockets.addAll(datas);
+        if (datas != null && !datas.isEmpty()){
+            Collections.reverse(datas);
+            rockets.addAll(datas);
+        }
         notifyDataSetChanged();
+
     }
 
     @Override
